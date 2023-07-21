@@ -6,16 +6,13 @@ using System;
 public class SnakeMovement : MonoBehaviour
 {
     public float speed = 1.0f;
-    //public FoodSpawn foodSpawn;
+    public Transform tailPrefab;
 
     private Rigidbody2D _body;
     private Vector2 vector = Vector2.right;
-
+    private List<Transform> _segments;
     private bool vertical = true;
     private bool horizontal = false;
-    private List<Transform> _segments;
-
-    public Transform segmentPrefab;
 
     private void Start()
     {
@@ -27,11 +24,9 @@ public class SnakeMovement : MonoBehaviour
     private void FixedUpdate()
     {
         Movement();
-        //Debug.Log(vector);
+
         for (int i = _segments.Count - 1; i > 0; i--)
-        {
             _segments[i].position = _segments[i - 1].position;
-        }
     }
 
     private void Movement()
@@ -76,18 +71,15 @@ public class SnakeMovement : MonoBehaviour
 
     private void Grow()
     {
-        Transform segment = Instantiate(this.segmentPrefab);
-        segment.position = _segments[_segments.Count - 1].position;
+        Transform tailSegment    = Instantiate(this.tailPrefab);
+        tailSegment.position = _segments[_segments.Count - 1].position;
 
-        _segments.Add(segment);
+        _segments.Add(tailSegment);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.TryGetComponent(out CollectFood2 food))
-        {
             Grow();
-            //foodSpawn.Spawner();
-        }
     }
 }

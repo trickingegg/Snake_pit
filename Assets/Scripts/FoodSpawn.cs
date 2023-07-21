@@ -1,16 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 using Random = UnityEngine.Random;
 
 public class FoodSpawn : MonoBehaviour
 {
+    [SerializeField] private GameObject _foodPrefab;
     private int numberOfObjects = 1;
 
-
-    [SerializeField] private GameObject _foodPrefab;
-    
     private void Start()
     {
         Spawner();
@@ -26,5 +23,4 @@ public class FoodSpawn : MonoBehaviour
             Instantiate (_foodPrefab, vector, Quaternion.identity);
         }
     }
-
 }

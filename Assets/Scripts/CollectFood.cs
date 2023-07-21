@@ -7,17 +7,6 @@ public class CollectFood : MonoBehaviour
 {
     public FoodSpawn foodSpawn;
 
-    void Start()
-    {
-
-    }
-
-
-    void Update()
-    {
-
-    }
-
     private void OnTriggerEnter2D(Collider2D _object)
     {
         if (_object.TryGetComponent(out CollectFood2 food))
@@ -27,6 +16,7 @@ public class CollectFood : MonoBehaviour
         }
 
     }
+    //first try make eating food work
 
     /*private void Eating()
     {
