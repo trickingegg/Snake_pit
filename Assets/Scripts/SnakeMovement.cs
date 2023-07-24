@@ -5,68 +5,63 @@ using System;
 
 public class SnakeMovement : MonoBehaviour
 {
+    public enum Direction { None = 0, Up = 1, Down = 2, Right = 3, Left = 4 };
+
     public float speed = 1.0f;
     public Transform tailPrefab;
 
     private Rigidbody2D _body;
+    public Direction direction;
     private Vector2 vector = Vector2.right;
     private List<Transform> _segments;
-    private bool vertical = true;
-    private bool horizontal = false;
 
     private void Start()
     {
         _body = GetComponent<Rigidbody2D>();
         _segments = new List<Transform>();
         _segments.Add(this.transform);
+        direction = Direction.None;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        Movement();
+        UpdateMovement();
 
         for (int i = _segments.Count - 1; i > 0; i--)
             _segments[i].position = _segments[i - 1].position;
     }
 
-    private void Movement()
+    private void UpdateMovement()
     {
         _body.MovePosition(_body.position + vector * speed * Time.deltaTime);
-
-        /*this.transform.position = new Vector3(
-            Mathf.Round(this.transform.position.x) + vector.x, 
-            Mathf.Round(this.transform.position.y) + vector.y, 
-            0.0f);*/
-
+        
         var deltaX = Input.GetAxis("Horizontal");
         var deltaY = Input.GetAxis("Vertical");
-       
-        if (deltaX > 0 && horizontal)
+
+        switch (direction)
         {
-            horizontal = false;
-            vertical = true;
-            vector = Vector2.right;
-        }
-        else if (deltaX < 0 && horizontal)
-        {
-            horizontal = false;
-            vertical = true;
-            vector = Vector2.left;
+            case Direction.Right:
+                vector = Vector2.right;
+                break;
+            case Direction.Left:
+                vector = Vector2.left;
+                break;
+            case Direction.Up:
+                vector = Vector2.up;
+                break;
+            case Direction.Down:
+                vector = Vector2.down;
+                break;
         }
 
-        else if (deltaY > 0 && vertical)
-        {
-            horizontal = true;
-            vertical = false;
-            vector = Vector2.up;
-        }
-        else if (deltaY < 0 && vertical)
-        {
-            horizontal = true;
-            vertical = false;
-            vector = Vector2.down;
-        }
-
+        if (deltaX > 0)
+            direction = Direction.Right;
+        else if (deltaX < 0)
+            direction = Direction.Left;
+        else if (deltaY > 0)
+            direction = Direction.Up;
+        else if (deltaY < 0)
+            direction = Direction.Down;
     }
 
     private void Grow()
@@ -79,7 +74,7 @@ public class SnakeMovement : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.TryGetComponent(out CollectFood2 food))
+        if (other.TryGetComponent(out Food food))
             Grow();
     }
 }

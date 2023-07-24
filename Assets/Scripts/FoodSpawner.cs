@@ -3,17 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class FoodSpawn : MonoBehaviour
+public class FoodSpawner : MonoBehaviour
 {
     [SerializeField] private GameObject _foodPrefab;
     private int numberOfObjects = 1;
 
     private void Start()
     {
-        Spawner();
+        TrySpawn();
     }
 
-    public void Spawner()
+    public void TrySpawn()
     {
         for (int i = 0; i < numberOfObjects; i++)
         {
